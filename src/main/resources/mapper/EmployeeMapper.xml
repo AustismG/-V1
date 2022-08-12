@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.task.mapper.EmployeeMapper">
+    <resultMap id="RegisterParamResultMap" type="com.example.task.param.RegisterParam">
+        <id property="eeId" column="e_id"/>
+        <result property="password" column="passwd"/>
+        <result property="eeName" column="e_name"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="departmentName" column="dep_name"/>
+    </resultMap>
+
+    <resultMap id="LoginParamResultMap" type="com.example.task.param.LoginParam">
+        <id property="eeId" column="e_id"/>
+        <result property="password" column="passwd"/>
+    </resultMap>
+
+    <resultMap id="getEmployeeById" type="com.example.task.entity.Employee">
+        <id property="eeId" column="e_id"/>
+        <result property="eeName" column="e_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="depId" column="dep_id"/>
+        <result property="depName" column="dep_name"/>
+        <result property="role" column="user_role"/>
+    </resultMap>
+
+    <resultMap id="getEmployeeVOById" type="com.example.task.vo.EmployeeVO">
+        <id property="eeId" column="e_id"/>
+        <result property="eeName" column="e_name"/>
+        <result property="sex" column="sez"/>
+        <result property="phone" column="phone"/>
+        <result property="departmentName" column="dep_name"/>
+    </resultMap>
+
+    <insert id="insert">
+        insert into salary_system.t_employee(e_id, passwd, e_name, sex, phone, dep_name, dep_id)
+        values (#{eeId}, #{encodedPassword}, #{eeName}, #{sex}, #{phone}, #{departmentName}, #{departmentId})
+    </insert>
+    <insert id="adminInsert">
+        insert into salary_system.t_employee(e_id, e_name, phone, sex, dep_name, user_role, passwd, dep_id)
+        values (#{eeId}, #{eeName}, #{phone}, #{sex}, #{departmentName}, #{role}, #{passwd}, #{departmentId})
+    </insert>
+
+    <update id="employeeModifyOwnInfo">
+        update salary_system.t_employee
+        <set>
+            <if test="password != null">
+                passwd = #{password}
+            </if>
+            <if test="eeName != null">
+                e_name = #{eeName}
+            </if>
+            <if test="sex != null">
+                sex = #{sex}
+            </if>
+            <if test="phone != null">
+                phone = #{phone}
+            </if>
+            <if test="departmentName != null">
+                dep_name = #{departmentName}
+                dep_id = (
+                select dep_id
+                from t_department
+                where dep_name = #{departmentName}
+                )
+            </if>
+        </set>
+    </update>
+    <update id="adminModifyEmployeeInfo">
+        update salary_system.t_employee
+        <set>
+            <if test="eeName != null">
+                e_name = #{eeName};
+            </if>
+            <if test="sex != null">
+                sex = #{sex};
+            </if>
+            <if test="departmentName != null">
+                dep_name = #{departmentName};
+            </if>
+            <if test="password != null">
+                passwd = #{password};
+            </if>
+            <if test="phone != null">
+                phone = #{phone};
+            </if>
+            <if test="role != null">
+                user_role = #{role};
+            </if>
+        </set>
+        where e_id = #{eeId}
+    </update>
+    <update id="updateDepName">
+        update salary_system.t_department
+        set dep_name = #{modifiedDepartmentName}
+        where dep_name = #{originDepartmentName}
+    </update>
+    <delete id="delete">
+        delete
+        from salary_system.t_employee
+        where e_id in (
+            <foreach collection="list" item="eeId" separator=",">
+                #{eeId}
+            </foreach>
+            )
+    </delete>
+
+    <select id="findEmployeeById" resultMap="RegisterParamResultMap">
+        select e_id
+        from salary_system.t_employee
+        where e_id = #{eeId}
+    </select>
+
+    <select id="getEmployeeByEId" resultMap="getEmployeeById">
+        select *
+        from salary_system.t_employee
+        where e_id = #{eeId}
+    </select>
+
+    <select id="getEmployeeList" resultMap="getEmployeeVOById">
+        select e_id,e_name,sex,phone,dep_name
+        from salary_system.t_employee
+        <where>
+            <if test="eeId != null">
+                e_id = #{eeId}
+            </if>
+            <if test="eeName != null">
+                e_name = #{eeName}
+            </if>
+            <if test="departmentName != null">
+                dep_name = #{departmentName}
+            </if>
+            <if test="phone != null">
+                phone = #{phone}
+            </if>
+            <if test="role != null">
+                user_role = #{role}
+            </if>
+        </where>
+    </select>
+</mapper>

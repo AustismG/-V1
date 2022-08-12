@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.task.mapper.DepartmentMapper">
+    <resultMap id="getDepartmentVO" type="com.example.task.vo.DepartmentVO">
+        <id property="departmentId" column="dep_id"/>
+        <result property="departmentName" column="dep_name"/>
+        <result property="parentDepartmentName" column="f_name"/>
+    </resultMap>
+    
+    <insert id="insert">
+        insert into salary_system.t_department(dep_id, dep_name, parent_id)
+        VALUES (#{departmentId}, #{departmentName}, #{parentDepId})
+    </insert>
+
+    <update id="updateDepName">
+        update salary_system.t_department
+        set dep_name = #{departmentName}
+        where dep_id = #{departmentId}
+    </update>
+    <update id="updateParentId">
+        update salary_system.t_department
+        set parent_id = #{parentId}
+        where dep_id = #{departmentId}
+    </update>
+
+
+    <delete id="delete">
+        delete
+        from salary_system.t_department
+        where dep_id = #{depId}
+    </delete>
+
+    <select id="getDepIdByDepName" resultType="java.lang.Long">
+        select dep_id
+        from salary_system.t_department
+        where dep_name = #{departmentName}
+    </select>
+
+    <select id="getSonDepId" resultType="java.lang.Long">
+        select dep_id
+        from salary_system.t_department
+        where parent_id = #{depId}
+    </select>
+    <select id="getDepNameByDepId" resultType="java.lang.String">
+        select dep_name
+        from salary_system.t_department
+        where dep_id = #{departmentId}
+    </select>
+    <select id="getDepList" resultMap="getDepartmentVO">
+        select son.dep_id,son.dep_name,father.dep_name f_name
+        from salary_system.t_department son left join salary_system.t_department father on (son.parent_id = father.dep_id)
+        <where>
+            <if test="departmentId != null">
+                son.dep_id = #{departmentId}
+            </if>
+            <if test="departmentName != null">
+                son.dep_name = #{departmentName}
+            </if>
+
+            <if test="parentId != null">
+                son.parent_id = #{parentId}
+            </if>
+        </where>
+    </select>
+</mapper>
+
+
+
+<!--
+    select son.dep_id,son.dep_name,father.dep_name
+    from t_department son left join t_department father on ()
+    where son.parent_id = 1
+-->
+
+
+
+
+
+
+
