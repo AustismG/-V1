@@ -88,12 +88,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void modifyOwnInfo(Long eId, EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam) {
-        String password = employeeModifyOwnInfoParam.getPassword();
         String eeName = employeeModifyOwnInfoParam.getEeName();
         Integer sex = employeeModifyOwnInfoParam.getSex();
         String phone = employeeModifyOwnInfoParam.getPhone();
         String departmentName = employeeModifyOwnInfoParam.getDepartmentName();
-        employeeMapper.employeeModifyOwnInfo(password, eeName, sex, phone, departmentName);
+        employeeMapper.employeeModifyOwnInfo(eeName, sex, phone, departmentName);
     }
 
     @Override
@@ -152,6 +151,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         pageResult.setPrev(pageInfo.isHasPreviousPage() ? pageInfo.getPrePage() : -1);
         pageResult.setList(list);
         return pageResult;
+    }
+
+    @Override
+    public void updatePassword(String originPassword, String modifiedPassword, Long employeeId) {
+        //首先获取数据库中加密的原密码，并于前端传过来的密码进行匹配
+        String encodedPassword = employeeMapper.getPasswordByEmployeeId(employeeId);
+        if (passwordEncoder.matches(originPassword,encodedPassword)) {
+            throw new BusinessException(ResultCodeEnum.WRONG_ORIGIN_PASSWORD);
+        }
+
+        //如果匹配成功，就可以修改密码了
+        employeeMapper.updatePassword(employeeId, modifiedPassword);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.task.controller;
 
 import com.example.task.entity.Employee;
+import com.example.task.param.EmployeeParam.UpdatePasswordParam;
 import com.example.task.param.LoginParam;
 import com.example.task.param.RegisterParam;
 import com.example.task.service.EmployeeService;
@@ -65,6 +66,13 @@ public class EmployeeController {
     public void modifyOwnInfo(@AuthenticationPrincipal Employee employee,
                               @RequestBody @Valid EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam) {
         employeeService.modifyOwnInfo(employee.getEeId(), employeeModifyOwnInfoParam);
+    }
+
+    @PutMapping("/password/{employeeId}")
+    public void updatePassword(@RequestBody UpdatePasswordParam updatePasswordParam, @PathVariable Long employeeId) {
+        employeeService.updatePassword(updatePasswordParam.getOriginPassword(),
+                updatePasswordParam.getModifiedPassword(),
+                employeeId);
     }
 }
 

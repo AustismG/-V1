@@ -12,12 +12,6 @@ import javax.validation.constraints.Min;
 @Data
 public class EmployeeModifyOwnInfoParam {
     /**
-     * 登录密码
-     */
-    @Length(max = 20,message = "密码长度最大为20")
-    private String password;
-
-    /**
      * 员工姓名
      */
     @Length(max = 20,message = "员工姓名长度最大为20")

@@ -31,6 +31,11 @@ public enum ResultCodeEnum {
     PHONE_ALREADY_EXIST(10005,"手机号已注册"),
 
     /**
+     * 用户提供的原密码错误
+     */
+    WRONG_ORIGIN_PASSWORD(10006,"原密码错误"),
+
+    /**
      * 部门不存在
      **/
     WRONG_DEPNAME(10010,"部门不存在"),

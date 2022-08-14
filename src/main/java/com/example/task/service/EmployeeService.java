@@ -29,4 +29,6 @@ public interface EmployeeService  {
     void AdminModifyEmployeeInfo(String eeName, Integer sex, String departmentName, String password, String phone, Integer role,Long eeId);
 
     PageResult<EmployeeVO> search(Long eeId, String eeName, String departmentName, String phone, Integer role, Integer current, Integer pageSize);
+
+    void updatePassword(String originPassword, String modifiedPassword, Long employeeId);
 }

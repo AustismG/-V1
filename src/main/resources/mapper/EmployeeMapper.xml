@@ -47,9 +47,6 @@
     <update id="employeeModifyOwnInfo">
         update salary_system.t_employee
         <set>
-            <if test="password != null">
-                passwd = #{password}
-            </if>
             <if test="eeName != null">
                 e_name = #{eeName}
             </if>
@@ -98,6 +95,13 @@
         set dep_name = #{modifiedDepartmentName}
         where dep_name = #{originDepartmentName}
     </update>
+
+    <update id="updatePassword">
+        update salary_system.t_employee
+        set passwd = #{modifiedPassword}
+        where e_id = #{employeeId}
+    </update>
+
     <delete id="delete">
         delete
         from salary_system.t_employee
@@ -140,5 +144,11 @@
                 user_role = #{role}
             </if>
         </where>
+    </select>
+
+    <select id="getPasswordByEmployeeId" resultType="java.lang.String">
+        select passwd
+        from salary_system.t_employee
+        where e_id = #{employeeId}
     </select>
 </mapper>
