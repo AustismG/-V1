@@ -18,17 +18,17 @@ import java.util.List;
 public interface EmployeeService  {
     void register(RegisterParam registerParam);
 
-    Employee login(Long eeId, String password);
+    Employee login(Long employeeId, String password);
 
-    void modifyOwnInfo(Long eeId, EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam);
+    void modifyOwnInfo(Long employeeId, EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam);
 
-    void insert(Long eeId, String eeName, Integer sex, String phone, String departmentName, Integer role);
+    void insert(Long employeeId, String employeeName, Integer sex, String phone, Long departmentId, Integer role);
 
-    void delete(List<Long> eeIdList);
+    void delete(Long employeeId);
 
-    void AdminModifyEmployeeInfo(String eeName, Integer sex, String departmentName, String password, String phone, Integer role,Long eeId);
+    void AdminModifyEmployeeInfo(String employeeName, Integer sex, Long departmentId, String password, String phone, Integer role,Long employeeId);
 
-    PageResult<EmployeeVO> search(Long eeId, String eeName, String departmentName, String phone, Integer role, Integer current, Integer pageSize);
+    PageResult<EmployeeVO> search(Long employeeId, String employeeName, Long departmentId, String phone, Integer role, Integer current, Integer pageSize);
 
-    void updatePassword(String originPassword, String modifiedPassword, Long employeeId);
+    void updatePassword(String originalPassword, String modifiedPassword, Long employeeId);
 }

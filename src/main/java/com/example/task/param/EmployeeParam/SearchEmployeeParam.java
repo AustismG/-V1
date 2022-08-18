@@ -16,14 +16,15 @@ public class SearchEmployeeParam {
     /**
      * 员工ID
      */
-    @Length(max = 6,min = 6,message = "员工ID长度为6位")
-    private Long eeId;
+    @Min(value = 800000,message = "员工ID最小值为800000")
+    @Max(value = 809999,message = "员工ID最大值为809999")
+    private Long employeeId;
 
     /**
      * 员工姓名
      */
     @Length(max = 20,message = "员工姓名长度最大为20")
-    private String eeName;
+    private String employeeName;
 
     /**
      * 用户角色
@@ -41,6 +42,5 @@ public class SearchEmployeeParam {
     /**
      * 部门名称
      */
-    @Length(max = 30,message = "部门名称长度最大为30")
-    private String departmentName;
+    private Long departmentId;
 }

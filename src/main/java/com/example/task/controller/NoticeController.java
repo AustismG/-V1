@@ -1,6 +1,5 @@
 package com.example.task.controller;
 
-import com.example.task.param.NoticeParam.AdminDelNoticeParam;
 import com.example.task.param.NoticeParam.AdminInsertNoticeParam;
 import com.example.task.param.NoticeParam.AdminModifyNoticeParam;
 import com.example.task.param.NoticeParam.SearchNoticeParam;
@@ -43,9 +42,9 @@ public class NoticeController {
      * @return void
      * @is_Available 测试已通过!       
      **/
-    @DeleteMapping("/notices")
-    public void delete(@RequestBody AdminDelNoticeParam adminDelNoticeParam) {
-        noticeService.delete(adminDelNoticeParam.getNoticeIdList());
+    @DeleteMapping("/notices/{noticeId}")
+    public void delete(@PathVariable Long noticeId) {
+        noticeService.delete(noticeId);
     }
 
     /**
@@ -55,9 +54,9 @@ public class NoticeController {
      * @return void
      * @is_Available 测试已通过!       
      **/
-    @PutMapping("/notices")
-    public void update(@RequestBody AdminModifyNoticeParam adminModifyNoticeParam) {
-        noticeService.update(adminModifyNoticeParam.getNoticeId(),adminModifyNoticeParam.getTitle(), adminModifyNoticeParam.getContent());
+    @PutMapping("/notices/{noticeId}")
+    public void update(@RequestBody AdminModifyNoticeParam adminModifyNoticeParam,@PathVariable Long noticeId) {
+        noticeService.update(noticeId,adminModifyNoticeParam.getTitle(), adminModifyNoticeParam.getContent());
     }
 
     /**

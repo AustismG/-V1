@@ -30,13 +30,13 @@ public class NoticeServiceImpl implements NoticeService{
     public void insert(String title, String content,String authorization) {
         JWTUtil jwtUtil = new JWTUtil();
         Employee employee = jwtUtil.getEmployeeFromToken(authorization);
-        noticeMapper.adminInsert(title,content,employee.getEeId());
+        noticeMapper.adminInsert(title,content,employee.getEmployeeId());
     }
 
     @Override
     @Transactional
-    public void delete(List<Long> noticeIdList) {
-        noticeMapper.delete(noticeIdList);
+    public void delete(Long noticeId) {
+        noticeMapper.delete(noticeId);
     }
 
     @Override

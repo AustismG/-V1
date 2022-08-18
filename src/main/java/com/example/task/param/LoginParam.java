@@ -15,7 +15,7 @@ public class LoginParam {
      * 员工ID
      */
     @NotNull(message = "员工ID不能为空")
-    private Long eeId;
+    private Long employeeId;
 
     /**
      * 登录密码

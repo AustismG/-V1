@@ -29,10 +29,7 @@
 
     <delete id="delete">
         delete from salary_system.t_notice
-        where notice_id in(
-            <foreach collection="noticeIdList" item="noticeId" separator=",">
-                #{noticeId}
-            </foreach> )
+        where notice_id = #{noticeId}
     </delete>
 
     <select id="getNoticeList" resultMap="getNoticeVO">

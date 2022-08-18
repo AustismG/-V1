@@ -16,7 +16,7 @@ public interface NoticeService {
 
     void insert(String title, String content,String authorization);
 
-    void delete(List<Long> noticeIdList);
+    void delete(Long noticeId);
 
     void update(Long noticeId,String title, String content);
 

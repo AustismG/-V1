@@ -17,14 +17,14 @@ public class AdmInsertEmployeeParam {
      * 员工ID
      */
     @NotNull(message = "员工ID不能为空")
-    private Long eeId;
+    private Long employeeId;
 
     /**
      * 员工姓名
      */
     @NotBlank(message = "姓名不能为空")
     @Length(max = 20,message = "姓名长度最大为20")
-    private String eeName;
+    private String employeeName;
 
     /**
      * 性别
@@ -44,9 +44,8 @@ public class AdmInsertEmployeeParam {
     /**
      * 部门名称
      */
-    @NotBlank(message = "部门名称不能为空")
-    @Length(max = 30,message = "部门名称长度最大为30")
-    private String departmentName;
+    @NotNull(message = "部门名称不能为空")
+    private Long departmentId;
 
     /**
      * 用户角色

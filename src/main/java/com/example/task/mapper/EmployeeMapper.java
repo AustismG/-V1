@@ -16,10 +16,10 @@ import java.util.List;
 @Mapper
 public interface EmployeeMapper {
 
-    Employee findEmployeeById(@Param("eeId") Long eeId);
+    Employee findEmployeeById(@Param("employeeId") Long employeeId);
 
-    int insert(@Param("eeId") Long eId,
-               @Param("eeName") String eName,
+    int insert(@Param("employeeId") Long employeeId,
+               @Param("employeeName") String employeeName,
                @Param("encodedPassword") String encodedPassword,
                @Param("sex") Integer sex,
                @Param("phone") String phone,
@@ -27,21 +27,22 @@ public interface EmployeeMapper {
                @Param("departmentId") Long departmentId);
 
     void employeeModifyOwnInfo(
-            @Param("eeName") String eName,
+            @Param("employeeName") String employeeName,
             @Param("sex") Integer sex,
             @Param("phone") String phone,
-            @Param("departmentName") String departmentName);
+            @Param("departmentId") Long departmentId,
+            @Param("employeeId") Long employeeId);
 
-    Employee getEmployeeByEId(Long eeId);
+    Employee getEmployeeByEId(@Param("employeeId") Long employeeId);
 
-    List<EmployeeVO> getEmployeeList(@Param("eeId") Long eeId,
-                                     @Param("eeName") String eeName,
-                                     @Param("departmentName") String departmentName,
+    List<EmployeeVO> getEmployeeList(@Param("employeeId") Long employeeId,
+                                     @Param("employeeName") String employeeName,
+                                     @Param("departmentId") Long departmentId,
                                      @Param("phone") String phone,
                                      @Param("role") Integer role);
 
-    void adminInsert(@Param("eeId") Long eeId,
-                     @Param("eeName") String eeName,
+    void adminInsert(@Param("employeeId") Long employeeId,
+                     @Param("employeeName") String employeeName,
                      @Param("sex") Integer sex,
                      @Param("phone") String phone,
                      @Param("departmentName") String departmentName,
@@ -49,15 +50,16 @@ public interface EmployeeMapper {
                      @Param("passwd") String passwd,
                      @Param("departmentId") Long departmentId);
 
-    void adminModifyEmployeeInfo(@Param("eeName") String eeName,
+    void adminModifyEmployeeInfo(@Param("employeeName") String employeeName,
                                  @Param("sex") Integer sex,
+                                 @Param("departmentId") Long departmentId,
                                  @Param("departmentName") String departmentName,
                                  @Param("password") String password,
                                  @Param("phone") String phone,
                                  @Param("role") Integer role,
-                                 @Param("eeId") Long eeId);
+                                 @Param("employeeId") Long employeeId);
 
-    void delete(List<Long> eeIdList);
+    void delete(@Param("employeeId") Long employeeId);
 
     void updateDepName(@Param("originDepartmentName") String originDepartmentName,
                        @Param("modifiedDepartmentName") String modifiedDepartmentName);
@@ -66,6 +68,8 @@ public interface EmployeeMapper {
 
     void updatePassword(@Param("employeeId") Long employeeId,
                         @Param("modifiedPassword") String modifiedPassword);
+
+    String getDepNameByDepId(@Param("departmentId") Long departmentId);
 }
 
 

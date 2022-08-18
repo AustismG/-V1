@@ -28,8 +28,7 @@ public class AdminAddDepParam {
     /**
      * 父部门名称
      */
-    @NotBlank(message = "父部门名称不能为空")
-    @Length(max = 30, message = "父部门名称长度最大为30")
-    private String parentDepName;
+    @NotNull(message = "父部门名称不能为空")
+    private Long parentDepId;
 }
 

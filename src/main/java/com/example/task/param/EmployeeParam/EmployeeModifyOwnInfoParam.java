@@ -15,7 +15,7 @@ public class EmployeeModifyOwnInfoParam {
      * 员工姓名
      */
     @Length(max = 20,message = "员工姓名长度最大为20")
-    private String eeName;
+    private String employeeName;
 
     /**
      * 性别
@@ -30,6 +30,5 @@ public class EmployeeModifyOwnInfoParam {
     @Length(max = 11,message = "手机号长度最大为11")
     private String phone;
 
-    @Length(max = 30,message = "部门名称长度最大为30")
-    private String departmentName;
+    private Long departmentId;
 }

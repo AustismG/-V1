@@ -19,7 +19,7 @@ public class JWTUtil {
 
     public static String createToken(Employee employee) {
         Map<String, String> map = new HashMap<>();
-        map.put("id", employee.getEeId().toString());
+        map.put("id", employee.getEmployeeId().toString());
         map.put("role", employee.getRole().toString());
 
         Calendar instance = Calendar.getInstance();
@@ -35,7 +35,7 @@ public class JWTUtil {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
         Map<String, Object> map = decodedJWT.getClaim("employee").asMap();
         Employee employee = new Employee();
-        employee.setEeId(Long.parseLong(map.get("id").toString()));
+        employee.setEmployeeId(Long.parseLong(map.get("id").toString()));
         employee.setRole(Integer.parseInt(map.get("role").toString()));
         return employee;
     }

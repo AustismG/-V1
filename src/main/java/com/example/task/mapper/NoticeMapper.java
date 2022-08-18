@@ -19,7 +19,7 @@ public interface NoticeMapper {
                      @Param("content") String content,
                      @Param("eeId") Long eeId);
 
-    void delete(@Param("noticeIdList") List<Long> noticeIdList);
+    void delete(@Param("noticeId") Long noticeId);
 
     void update(@Param("noticeId") Long noticeId,
                 @Param("title") String title,

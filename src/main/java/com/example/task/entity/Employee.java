@@ -20,7 +20,7 @@ public class Employee implements Serializable, UserDetails {
     /**
      * 员工ID
      */
-    private Long eeId;
+    private Long employeeId;
 
     /**
      * 密码
@@ -30,7 +30,7 @@ public class Employee implements Serializable, UserDetails {
     /**
      * 员工姓名
      */
-    private String eeName;
+    private String employeeName;
 
     /**
      * 性别
@@ -87,7 +87,7 @@ public class Employee implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.getEeName();
+        return this.getEmployeeName();
     }
 
     //必须为true！

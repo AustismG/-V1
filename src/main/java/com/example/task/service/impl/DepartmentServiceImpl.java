@@ -33,11 +33,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     private EmployeeMapper employeeMapper;
 
     @Override
-    public void insert(Long departmentId, String departmentName, String parentDepName) {
-        Long parentDepId = departmentMapper.getDepIdByDepName(parentDepName);
-        if (parentDepId == null) {
-            log.info("[错误提示] 输入的父部门名称是：" + parentDepName);
-            throw new BusinessException(ResultCodeEnum.WRONG_DEPNAME);
+    public void insert(Long departmentId, String departmentName, Long parentDepId) {
+        String parentDepName = departmentMapper.getDepNameByDepId(parentDepId);
+        if (parentDepName == null) {
+            log.info("[错误提示] 输入的父部门ID是：" + parentDepId);
+            throw new BusinessException(ResultCodeEnum.WRONG_DEP);
         }
 
         try {
@@ -71,7 +71,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             Long destParentId = departmentMapper.getDepIdByDepName(modifiedParentDepName);
             if (destParentId == null) {
                 log.warn("[错误提示] 输入的父部门名称是：" + modifiedParentDepName);
-                throw new BusinessException(ResultCodeEnum.WRONG_DEPNAME);
+                throw new BusinessException(ResultCodeEnum.WRONG_DEP);
             }
             departmentMapper.updateParentId(departmentId,destParentId);
         }

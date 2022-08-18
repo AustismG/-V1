@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class UpdatePasswordParam {
     @NotNull(message = "原密码不能为空")
-    private String originPassword;
+    private String originalPassword;
 
     @NotNull(message = "新密码不能为空")
     private String modifiedPassword;

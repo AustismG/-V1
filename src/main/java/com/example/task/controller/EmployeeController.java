@@ -48,7 +48,7 @@ public class EmployeeController {
      **/
     @PostMapping("/login")
     public Object login(@RequestBody @Valid LoginParam loginParam, HttpServletResponse httpServletResponse) {
-        Employee employee = employeeService.login(loginParam.getEeId(), loginParam.getPassword());
+        Employee employee = employeeService.login(loginParam.getEmployeeId(), loginParam.getPassword());
         String token = JWTUtil.createToken(employee);
         httpServletResponse.setHeader("token", token);
         return new Object();
@@ -65,12 +65,12 @@ public class EmployeeController {
     @PreAuthorize("hasRole('USER')")
     public void modifyOwnInfo(@AuthenticationPrincipal Employee employee,
                               @RequestBody @Valid EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam) {
-        employeeService.modifyOwnInfo(employee.getEeId(), employeeModifyOwnInfoParam);
+        employeeService.modifyOwnInfo(employee.getEmployeeId(), employeeModifyOwnInfoParam);
     }
 
     @PutMapping("/password/{employeeId}")
     public void updatePassword(@RequestBody UpdatePasswordParam updatePasswordParam, @PathVariable Long employeeId) {
-        employeeService.updatePassword(updatePasswordParam.getOriginPassword(),
+        employeeService.updatePassword(updatePasswordParam.getOriginalPassword(),
                 updatePasswordParam.getModifiedPassword(),
                 employeeId);
     }

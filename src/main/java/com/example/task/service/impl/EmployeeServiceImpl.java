@@ -48,25 +48,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void register(RegisterParam registerParam) {
-        Long eeId = registerParam.getEeId();
-        String eName = registerParam.getEeName();
+        Long employeeId = registerParam.getEmployeeId();
+        String employeeName = registerParam.getEmployeeName();
         String password = registerParam.getPassword();
         String encodedPassword = passwordEncoder.encode(password);
-        String departmentName = registerParam.getDepartmentName();
+        Long departmentId = registerParam.getDepartmentId();
         Integer sex = registerParam.getSex();
         String phone = registerParam.getPhone();
 
         //首先用前端传过来的员工ID在数据库里查询，看看是否已经存在这个用户，如果存在说明这个用户已经注册过了
-        Employee employee = employeeMapper.findEmployeeById(eeId);
+        Employee employee = employeeMapper.findEmployeeById(employeeId);
         if (employee != null) {
             throw new BusinessException(ResultCodeEnum.USERNAME_ALREADY_EXIST, "用户已存在");
         }
 
-        //员工注册时，系统通过改员工提供的部门名称查询对应的部门ID，帮员工写入对应字段
-        //getIdByName()实现了“通过部门名称查询部门ID”的功能
-        Long departmentId = departmentMapper.getDepIdByDepName(departmentName);
+        //员工注册时，系统通过前端提供的部门ID查询对应的部门名称，帮员工写入对应字段
+        //getIdByName()实现了“通过部门ID查询部门名称”的功能
+        String departmentName = departmentMapper.getDepNameByDepId(departmentId);
         try {
-            employeeMapper.insert(eeId, eName, encodedPassword, sex,phone, departmentName, departmentId);
+            employeeMapper.insert(employeeId, employeeName, encodedPassword, sex,phone, departmentName, departmentId);
         } catch (DuplicateKeyException e) {
             throw new BusinessException(ResultCodeEnum.PHONE_ALREADY_EXIST);
         }
@@ -87,12 +87,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void modifyOwnInfo(Long eId, EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam) {
-        String eeName = employeeModifyOwnInfoParam.getEeName();
-        Integer sex = employeeModifyOwnInfoParam.getSex();
-        String phone = employeeModifyOwnInfoParam.getPhone();
-        String departmentName = employeeModifyOwnInfoParam.getDepartmentName();
-        employeeMapper.employeeModifyOwnInfo(eeName, sex, phone, departmentName);
+    public void modifyOwnInfo(Long employeeId, EmployeeModifyOwnInfoParam employeeModifyOwnInfoParam) {
+        employeeMapper.employeeModifyOwnInfo(employeeModifyOwnInfoParam.getEmployeeName(),
+                employeeModifyOwnInfoParam.getSex(),
+                employeeModifyOwnInfoParam.getPhone(),
+                employeeModifyOwnInfoParam.getDepartmentId(),
+                employeeId);
     }
 
     @Override
@@ -100,13 +100,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                        String eeName,
                        Integer sex,
                        String phone,
-                       String departmentName,
+                       Long departmentId,
                        Integer role) {
         String defaultPasswd = "123456@xyz";
         String encodedPasswd = passwordEncoder.encode(defaultPasswd);
-        Long departmentId = departmentMapper.getDepIdByDepName(departmentName);
-        if (departmentId == null) {
-            throw new BusinessException(ResultCodeEnum.WRONG_DEPNAME,"部门不存在，请检查输入或联系管理员添加部门");
+        String departmentName = departmentMapper.getDepNameByDepId(departmentId);
+        if (departmentName == null) {
+            throw new BusinessException(ResultCodeEnum.WRONG_DEP,"部门不存在，请检查输入或联系管理员添加部门");
         }
         try {
             employeeMapper.adminInsert(eeId, eeName, sex, phone, departmentName, role, encodedPasswd, departmentId);
@@ -117,32 +117,39 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void delete(List<Long> eeIdList) {
-        employeeMapper.delete(eeIdList);
+    public void delete(Long employeeId) {
+        employeeMapper.delete(employeeId);
     }
 
     @Override
-    public void AdminModifyEmployeeInfo(String eeName,
+    public void AdminModifyEmployeeInfo(String employeeName,
                        Integer sex,
-                       String departmentName,
+                       Long departmentId,
                        String password,
                        String phone,
                        Integer role,
-                       Long eeId) {
-        employeeMapper.adminModifyEmployeeInfo(eeName, sex, departmentName, password, phone, role,eeId);
+                       Long employeeId) {
+        String departmentName = null;
+        if (password != null) {
+            password = passwordEncoder.encode(password);
+        }
+        if (departmentId != null) {
+            departmentName = employeeMapper.getDepNameByDepId(departmentId);
+        }
+        employeeMapper.adminModifyEmployeeInfo(employeeName, sex, departmentId,departmentName, password, phone, role,employeeId);
     }
 
     @Override
-    public PageResult<EmployeeVO> search(Long eeId,
-                                         String eeName,
-                                         String departmentName,
+    public PageResult<EmployeeVO> search(Long employeeId,
+                                         String employeeName,
+                                         Long departmentId,
                                          String phone,
                                          Integer role,
                                          Integer current,
                                          Integer pageSize) {
 
         PageHelper.startPage(current, pageSize);
-        List<EmployeeVO> list = employeeMapper.getEmployeeList(eeId, eeName, departmentName, phone, role);
+        List<EmployeeVO> list = employeeMapper.getEmployeeList(employeeId, employeeName, departmentId, phone, role);
         PageInfo<EmployeeVO> pageInfo = new PageInfo<>(list);
 
         PageResult<EmployeeVO> pageResult = new PageResult<>();
@@ -154,15 +161,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updatePassword(String originPassword, String modifiedPassword, Long employeeId) {
+    public void updatePassword(String originalPassword, String modifiedPassword, Long employeeId) {
         //首先获取数据库中加密的原密码，并于前端传过来的密码进行匹配
         String encodedPassword = employeeMapper.getPasswordByEmployeeId(employeeId);
-        if (passwordEncoder.matches(originPassword,encodedPassword)) {
+        if (!passwordEncoder.matches(originalPassword,encodedPassword)) {
             throw new BusinessException(ResultCodeEnum.WRONG_ORIGIN_PASSWORD);
         }
-
         //如果匹配成功，就可以修改密码了
-        employeeMapper.updatePassword(employeeId, modifiedPassword);
+        employeeMapper.updatePassword(employeeId, passwordEncoder.encode(modifiedPassword));
     }
 }
 

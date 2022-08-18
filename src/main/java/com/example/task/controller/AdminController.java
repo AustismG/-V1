@@ -17,6 +17,7 @@ import com.example.task.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,11 +47,11 @@ public class AdminController {
     @PostMapping("/employees")
     @PreAuthorize("hasRole('ADMIN')")
     public void insert(@RequestBody @Valid AdmInsertEmployeeParam admInsertEmployeeParam) {
-        employeeService.insert(admInsertEmployeeParam.getEeId(),
-                admInsertEmployeeParam.getEeName(),
+        employeeService.insert(admInsertEmployeeParam.getEmployeeId(),
+                admInsertEmployeeParam.getEmployeeName(),
                 admInsertEmployeeParam.getSex(),
                 admInsertEmployeeParam.getPhone(),
-                admInsertEmployeeParam.getDepartmentName(),
+                admInsertEmployeeParam.getDepartmentId(),
                 admInsertEmployeeParam.getRole());
         log.info("insert方法执行完毕");
     }
@@ -62,10 +63,10 @@ public class AdminController {
      * @return void
      * @is_Available 测试已通过!
      **/
-    @DeleteMapping("/employees")
+    @DeleteMapping("/employees/{employeeId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void delete(@RequestBody AdminDelEmployeeParam adminDelEmployeeParam) {
-        employeeService.delete(adminDelEmployeeParam.getEeIdList());
+    public void delete(@PathVariable Long employeeId) {
+        employeeService.delete(employeeId);
     }
 
     /**
@@ -75,16 +76,16 @@ public class AdminController {
      * @return void
      * @is_Available 测试已通过!
      **/
-    @PutMapping("/employees/{eeId}")
+    @PutMapping("/employees/{employeeId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void update(@RequestBody @Valid AdminModifyEmployeeParam adminModifyEmployeeParam, @PathVariable Long eeId) {
-        employeeService.AdminModifyEmployeeInfo(adminModifyEmployeeParam.getEeName(),
+    public void update(@RequestBody @Valid AdminModifyEmployeeParam adminModifyEmployeeParam, @PathVariable Long employeeId) {
+        employeeService.AdminModifyEmployeeInfo(adminModifyEmployeeParam.getEmployeeName(),
                 adminModifyEmployeeParam.getSex(),
-                adminModifyEmployeeParam.getDepartmentName(),
+                adminModifyEmployeeParam.getDepartmentId(),
                 adminModifyEmployeeParam.getPassword(),
                 adminModifyEmployeeParam.getPhone(),
                 adminModifyEmployeeParam.getRole(),
-                eeId);
+                employeeId);
     }
 
     /**
@@ -97,9 +98,9 @@ public class AdminController {
     @GetMapping("/employees")
     @PreAuthorize("hasRole('ADMIN')")
     public PageResult<EmployeeVO> search(@Valid SearchEmployeeParam searchEmployeeParam, PagingParam pagingParam) {
-        return employeeService.search(searchEmployeeParam.getEeId(),
-                searchEmployeeParam.getEeName(),
-                searchEmployeeParam.getDepartmentName(),
+        return employeeService.search(searchEmployeeParam.getEmployeeId(),
+                searchEmployeeParam.getEmployeeName(),
+                searchEmployeeParam.getDepartmentId(),
                 searchEmployeeParam.getPhone(),
                 searchEmployeeParam.getRole(),
                 pagingParam.getCurrent(),
@@ -122,7 +123,7 @@ public class AdminController {
     public void insertDep(@RequestBody @Valid AdminAddDepParam adminAddDepParam) {
         departmentService.insert(adminAddDepParam.getDepartmentId(),
                 adminAddDepParam.getDepartmentName(),
-                adminAddDepParam.getParentDepName());
+                adminAddDepParam.getParentDepId());
     }
 
     /**
@@ -145,10 +146,10 @@ public class AdminController {
      * @return void
      * @is_Available 测试已通过!
      **/
-    @PutMapping("/departments")
+    @PutMapping("/departments/{departmentId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void updateDep(@RequestBody @Valid AdminModifyDepartmentParam adminModifyDepartmentParam) {
-        departmentService.update(adminModifyDepartmentParam.getDepartmentId(), adminModifyDepartmentParam.getDepartmentName(), adminModifyDepartmentParam.getParentDepName());
+    public void updateDep(@RequestBody @Valid AdminModifyDepartmentParam adminModifyDepartmentParam, @PathVariable Long departmentId) {
+        departmentService.update(departmentId, adminModifyDepartmentParam.getDepartmentName(), adminModifyDepartmentParam.getParentDepName());
     }
 
     /**

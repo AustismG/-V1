@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public interface DepartmentService {
 
-    void insert(Long departmentId, String departmentName, String parentDepName);
+    void insert(Long departmentId, String departmentName, Long parentDepId);
 
     void delete(List<Long> depIdList);
 

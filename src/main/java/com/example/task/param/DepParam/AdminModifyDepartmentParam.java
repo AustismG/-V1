@@ -11,12 +11,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AdminModifyDepartmentParam {
     /**
-     * 部门ID
-     */
-    @NotNull(message = "部门ID不能为空")
-    private Long departmentId;
-
-    /**
      * 部门名称
      */
     @Length(max = 30, message = "部门名称长度最大为30")

@@ -38,7 +38,7 @@ public enum ResultCodeEnum {
     /**
      * 部门不存在
      **/
-    WRONG_DEPNAME(10010,"部门不存在"),
+    WRONG_DEP(10010,"部门不存在"),
 
     /**
      * 部门已存在
