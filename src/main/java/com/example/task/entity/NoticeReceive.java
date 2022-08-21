@@ -5,38 +5,28 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
- * 公告表
- * @TableName t_notice
+ * 公告接收表
+ * @TableName t_notice_receive
  */
 @Data
-public class Notice implements Serializable {
+public class NoticeReceive implements Serializable {
+    /**
+     * 这张表的主键
+     */
+    private Long id;
+
     /**
      * 公告ID
      */
     private Long noticeId;
 
     /**
-     * 公告标题
+     * 接收者ID
      */
-    private String title;
+    private Long receiverId;
 
     /**
-     * 公告内容
-     */
-    private String content;
-
-    /**
-     * 发布公告者ID
-     */
-    private Long publisherId;
-
-    /**
-     * 接收者的部门ID列表
-     */
-    private String receiverDepIdList;
-
-    /**
-     * 公告的状态/0已发送/1草稿
+     * 对于接收者这条公告的状态/0未读/1已读
      */
     private Integer noticeStatus;
 

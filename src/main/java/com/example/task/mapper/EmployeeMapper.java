@@ -70,6 +70,8 @@ public interface EmployeeMapper {
                         @Param("modifiedPassword") String modifiedPassword);
 
     String getDepNameByDepId(@Param("departmentId") Long departmentId);
+
+    List<Long> getEmployeeIdByDepId(@Param("receiverDepId") String receiverDepId);
 }
 
 

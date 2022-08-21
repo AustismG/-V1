@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @Description:
@@ -19,6 +21,18 @@ public class AdminInsertNoticeParam {
     /**
      * 公告内容
      */
-    @NotNull
+    @NotBlank
     private String content;
+
+    /**
+     * 接收部门ID列表
+     */
+    @Size(min = 1,message = "接收部门ID列表不能为空")
+    private List<String> receiverDepIdList;
+
+    /**
+     * 公告状态
+     */
+    @NotNull
+    private Integer noticeStatus;
 }

@@ -24,4 +24,10 @@ public class AdminModifyNoticeParam {
      * 公告内容
      */
     private String content;
+
+    /**
+     * 公告状态
+     */
+    @NotNull
+    private Integer noticeStatus;
 }

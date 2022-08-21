@@ -10,8 +10,8 @@
     </resultMap>
 
     <insert id="adminInsert">
-        insert into salary_system.t_notice(title, content, publisher_id)
-        values (#{title}, #{content}, #{eeId})
+        insert into salary_system.t_notice(title, content,receiver_dep_id_list,notice_status, publisher_id)
+        values (#{title}, #{content},#{receiverDepIdStr},#{noticeStatus}, #{publisherId})
     </insert>
 
     <update id="update">
@@ -28,7 +28,8 @@
     </update>
 
     <delete id="delete">
-        delete from salary_system.t_notice
+        delete
+        from salary_system.t_notice
         where notice_id = #{noticeId}
     </delete>
 
@@ -54,5 +55,9 @@
         </where>
     </select>
 
-
+    <select id="getNoticeIdByTitle" resultType="java.lang.Long">
+        select notice_id
+        from salary_system.t_notice
+        where title = #{title}
+    </select>
 </mapper>

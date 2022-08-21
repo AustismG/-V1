@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.task.mapper.NoticeReceiveMapper">
+    <insert id="insert">
+        insert into salary_system.t_notice_receive(notice_id, receiver_id)
+        values (#{noticeId}, #{receiverId})
+    </insert>
+</mapper>

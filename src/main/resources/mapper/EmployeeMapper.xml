@@ -159,4 +159,10 @@
         from salary_system.t_department
         where dep_id = #{departmentId}
     </select>
+
+    <select id="getEmployeeIdByDepId" resultType="java.lang.Long">
+        select employee_id
+        from salary_system.t_employee
+        where dep_id = #{receiverDepId};
+    </select>
 </mapper>
