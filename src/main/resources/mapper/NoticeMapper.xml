@@ -10,8 +10,8 @@
     </resultMap>
 
     <insert id="adminInsert">
-        insert into salary_system.t_notice(title, content,receiver_dep_id_list,notice_status, publisher_id)
-        values (#{title}, #{content},#{receiverDepIdStr},#{noticeStatus}, #{publisherId})
+        insert into salary_system.t_notice(title, content, receiver_dep_id_list, notice_status, publisher_id)
+        values (#{title}, #{content}, #{receiverDepIdStr}, #{noticeStatus}, #{publisherId})
     </insert>
 
     <update id="update">
@@ -24,6 +24,12 @@
                 content = #{content}
             </if>
         </set>
+        where notice_id = #{noticeId}
+    </update>
+
+    <update id="updateNoticeStatus">
+        update salary_system.t_notice
+        set notice_status = #{status}
         where notice_id = #{noticeId}
     </update>
 

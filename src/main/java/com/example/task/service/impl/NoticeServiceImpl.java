@@ -74,9 +74,14 @@ public class NoticeServiceImpl implements NoticeService{
      * @return void
      * @is_Available 测试未通过!
      **/
+    @Transactional
     public int publishNotice(Long publisherId,
                               List<String> receiverDepIdList,
                               Long noticeId) {
+
+        //首先修改”公告表“中该条公告的状态为”已发布“
+        Integer status = 0; //0代表已发布的状态
+        noticeMapper.updateNoticeStatus(noticeId,status);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(new Date());

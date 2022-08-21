@@ -53,11 +53,11 @@ public class NoticeController {
      * @is_Available 测试未通过!
      **/
     @PostMapping("/notices/{noticeId}")
-    public void publish(@RequestBody AdminPublishNoticeParam adminPublishNoticeParam,
+    public Integer publish(@RequestBody AdminPublishNoticeParam adminPublishNoticeParam,
                         @PathVariable Long noticeId,
                         @AuthenticationPrincipal Employee employee) {
 
-        noticeService.publishNotice(employee.getEmployeeId(),
+        return noticeService.publishNotice(employee.getEmployeeId(),
                 adminPublishNoticeParam.getReceiverDepIdList(),
                 noticeId);
     }

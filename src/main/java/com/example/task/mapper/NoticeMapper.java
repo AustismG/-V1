@@ -37,6 +37,9 @@ public interface NoticeMapper {
 
     Long getNoticeIdByTitle(@Param("publisherId") Long publisherId,
                             @Param("title") String title);
+
+    void updateNoticeStatus(@Param("noticeId") Long noticeId,
+                            @Param("status") Integer status);
 }
 
 
