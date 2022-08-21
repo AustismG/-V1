@@ -53,7 +53,12 @@ public enum ResultCodeEnum {
     /**
      * 重复插入薪酬记录
      **/
-    SALARYRECORD_ALREADY_EXIST(10021, "该条薪酬记录已存在，请勿重复插入");
+    SALARYRECORD_ALREADY_EXIST(10021, "该条薪酬记录已存在，请勿重复插入"),
+
+    /**
+     * 重复使用相同的公告标题
+     **/
+    TITLE_ALREADY_EXIST(10022,"该公告标题已存在，请勿重复使用");
 
     private final int code;
     private final String message;
