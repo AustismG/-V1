@@ -47,7 +47,7 @@ public class NoticeServiceImpl implements NoticeService{
                        Long publisherId) {
 
         String receiverDepIdStr = StringUtils.join(receiverDepIdList);
-        int employeeCount = 0;
+        int receiverCount = 0;
         try {
             //1. 管理员选择暂存为草稿，不发布
             if (noticeStatus == 1) {
@@ -58,13 +58,13 @@ public class NoticeServiceImpl implements NoticeService{
             else if (noticeStatus == 0) {
                 noticeMapper.adminInsert(title, content, receiverDepIdStr, noticeStatus, publisherId);
                 Long noticeId = noticeMapper.getNoticeIdByTitle(publisherId, title);
-                employeeCount = publishNotice(publisherId, receiverDepIdList, noticeId);
+                receiverCount = publishNotice(publisherId, receiverDepIdList, noticeId);
             }
         } catch (DuplicateKeyException e) {
             throw new BusinessException(ResultCodeEnum.TITLE_ALREADY_EXIST);
         }
 
-        return employeeCount;
+        return receiverCount;
     }
 
     /**
@@ -85,17 +85,38 @@ public class NoticeServiceImpl implements NoticeService{
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = sdf.format(new Date());
-        int employeeCount = 0;
+        int receiverCount = 0;
         for (String receiverDepId : receiverDepIdList) {
             List<Long> receiverIdList = employeeMapper.getEmployeeIdByDepId(receiverDepId);
-            employeeCount += receiverIdList.size();
+            receiverCount += receiverIdList.size();
             //同步“公告发送表”
             for (Long receiverId : receiverIdList) {
                 noticeSendMapper.insert(publisherId,receiverId,noticeId,currentTime);
                 noticeReceiveMapper.insert(noticeId,receiverId);
             }
         }
-        return employeeCount;
+        return receiverCount;
+    }
+
+
+    /**
+     * @Author Gzy
+     * @Description 将已发布的某条公告，转发给其它部门
+     * @Param [publisherId, receiverDepIdList, noticeId]
+     * @return java.lang.Integer
+     * @is_Available 测试未通过!
+     **/
+    @Override
+    @Transactional
+    public Integer forward(Long publisherId, List<String> receiverDepIdList, Long noticeId) {
+        //首先向“公告发送表”、“公告接收表”同步数据
+        //其次，回过头来更新”公告表“中该公告的”接收部门ID“字段
+        Integer receiverCount = publishNotice(publisherId, receiverDepIdList, noticeId);
+
+        String originalReceiverDepIdList = noticeMapper.getReceiverDepIdList(noticeId);
+        originalReceiverDepIdList += ","+StringUtils.join(receiverDepIdList);
+        noticeMapper.updateReceiverDepIdList(noticeId,originalReceiverDepIdList);
+        return receiverCount;
     }
 
 
@@ -108,9 +129,8 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     public void update(Long noticeId,
                        String title,
-                       String content,
-                       Integer noticeStatus) {
-        noticeMapper.update(noticeId,title, content,noticeStatus);
+                       String content) {
+        noticeMapper.update(noticeId,title, content);
     }
 
     @Override

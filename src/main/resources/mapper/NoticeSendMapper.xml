@@ -7,4 +7,10 @@
         insert into salary_system.t_notice_send(sender_id, receiver_id, notice_id, send_time)
         values (#{publisherId}, #{receiverId}, #{noticeId}, #{currentTime})
     </insert>
+
+    <update id="updateStatus">
+        update salary_system.t_notice_send
+        set sender_status = #{senderStatus}
+        where notice_id = #{noticeId}
+    </update>
 </mapper>

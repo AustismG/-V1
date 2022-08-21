@@ -1,6 +1,8 @@
 package com.example.task.service.impl;
 
+import com.example.task.mapper.NoticeSendMapper;
 import com.example.task.service.NoticeSendService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,7 +12,13 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class NoticeSendServiceImpl implements NoticeSendService{
+    @Autowired
+    private NoticeSendMapper noticeSendMapper;
 
+    @Override
+    public void updateStatus(Long noticeId, Integer senderStatus) {
+        noticeSendMapper.updateStatus(noticeId,senderStatus);
+    }
 }
 
 

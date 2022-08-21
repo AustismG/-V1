@@ -25,8 +25,7 @@ public interface NoticeMapper {
 
     void update(@Param("noticeId") Long noticeId,
                 @Param("title") String title,
-                @Param("content") String content,
-                @Param("noticeStatus") Integer noticeStatus);
+                @Param("content") String content);
 
     List<NoticeVO> getNoticeList(@Param("noticeId") Long noticeId,
                                  @Param("publisherId") Long publisherId,
@@ -40,6 +39,11 @@ public interface NoticeMapper {
 
     void updateNoticeStatus(@Param("noticeId") Long noticeId,
                             @Param("status") Integer status);
+
+    void updateReceiverDepIdList(@Param("noticeId") Long noticeId,
+                                 @Param("originalReceiverDepIdList") String originalReceiverDepIdList);
+
+    String getReceiverDepIdList(@Param("noticeId") Long noticeId);
 }
 
 

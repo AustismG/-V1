@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Slf4j
-@RequestMapping("/sysytem/admins")
+@RequestMapping("/system/admins")
 public class NoticeSendController {
     @Autowired
     private NoticeSendService noticeSendService;

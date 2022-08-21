@@ -33,6 +33,12 @@
         where notice_id = #{noticeId}
     </update>
 
+    <update id="updateReceiverDepIdList">
+        update salary_system.t_notice
+        set receiver_dep_id_list = #{originalReceiverDepIdList}
+        where notice_id = #{noticeId};
+    </update>
+
     <delete id="delete">
         delete
         from salary_system.t_notice
@@ -40,8 +46,8 @@
     </delete>
 
     <select id="getNoticeList" resultMap="getNoticeVO">
-        select title,content,publisher_id,create_time
-        from salary_system.t_notice
+        select title,content,publisher_id,t1.create_time
+        from salary_system.t_notice t1 left join salary_system.t_notice_send  t2 on t1.notice_id = t2.notice_id
         <where>
             <if test="noticeId != null">
                 notice_id = #{noticeId}
@@ -58,6 +64,7 @@
             <if test="startDate != null and endDate != null">
                 create_time between #{startDate} and #{endDate}
             </if>
+            t2.sender_status = 0
         </where>
     </select>
 
@@ -65,5 +72,11 @@
         select notice_id
         from salary_system.t_notice
         where title = #{title}
+    </select>
+
+    <select id="getReceiverDepIdList" resultType="java.lang.String">
+        select receiver_dep_id_list
+        from salary_system.t_notice
+        where notice_id = #{noticeId}
     </select>
 </mapper>

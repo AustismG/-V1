@@ -25,9 +25,9 @@ public class AdminModifyNoticeParam {
      */
     private String content;
 
-    /**
-     * 公告状态
-     */
-    @NotNull
-    private Integer noticeStatus;
+//    /**
+//     * 公告状态
+//     */
+//    @NotNull
+//    private Integer noticeStatus;
 }

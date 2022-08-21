@@ -17,9 +17,11 @@ public interface NoticeService {
 
     void delete(Long noticeId);
 
-    void update(Long noticeId,String title, String content,Integer noticeStatus);
+    void update(Long noticeId,String title, String content);
 
     PageResult<NoticeVO> search(Long noticeId, Long publisherId, String title, String content, String startDate, String endDate, Integer current, Integer pageSize);
 
     int publishNotice(Long publisherId, List<String> receiverDepIdList, Long noticeId);
+
+    Integer forward(Long publisherId, List<String> receiverDepIdList, Long noticeId);
 }

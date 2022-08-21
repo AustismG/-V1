@@ -16,6 +16,9 @@ public interface NoticeSendMapper{
                 @Param("receiverId") Long receiverId,
                 @Param("noticeId") Long noticeId,
                 @Param("currentTime") String currentTime);
+
+    void updateStatus(@Param("noticeId") Long noticeId,
+                      @Param("senderStatus") Integer senderStatus);
 }
 
 

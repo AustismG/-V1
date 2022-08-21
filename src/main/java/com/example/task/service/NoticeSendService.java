@@ -7,4 +7,5 @@ package com.example.task.service;
 */
 public interface NoticeSendService {
 
+    void updateStatus(Long noticeId, Integer senderStatus);
 }

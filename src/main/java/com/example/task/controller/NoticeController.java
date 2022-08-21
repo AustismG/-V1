@@ -1,10 +1,7 @@
 package com.example.task.controller;
 
 import com.example.task.entity.Employee;
-import com.example.task.param.NoticeParam.AdminInsertNoticeParam;
-import com.example.task.param.NoticeParam.AdminModifyNoticeParam;
-import com.example.task.param.NoticeParam.AdminPublishNoticeParam;
-import com.example.task.param.NoticeParam.SearchNoticeParam;
+import com.example.task.param.NoticeParam.*;
 import com.example.task.param.PagingParam;
 import com.example.task.service.NoticeService;
 import com.example.task.vo.CommonResult;
@@ -50,7 +47,7 @@ public class NoticeController {
      * @Author Gzy
      * @Description 管理员发布草稿中的公告
      * @Param []
-     * @is_Available 测试未通过!
+     * @is_Available 测试已通过!
      **/
     @PostMapping("/notices/{noticeId}")
     public Integer publish(@RequestBody AdminPublishNoticeParam adminPublishNoticeParam,
@@ -87,9 +84,26 @@ public class NoticeController {
                        @PathVariable Long noticeId) {
 
         noticeService.update(noticeId,adminModifyNoticeParam.getTitle(),
-                adminModifyNoticeParam.getContent(),
-                adminModifyNoticeParam.getNoticeStatus());
+                adminModifyNoticeParam.getContent());
     }
+
+    /**
+     * @Author Gzy
+     * @Description 将已发布的某条公告，转发给其它部门
+     * @Param [adminForwardNoticeParam, noticeId, employee]
+     * @return java.lang.Integer
+     * @is_Available 测试已通过!
+     **/
+    @PostMapping("/notices/otherDep/{noticeId}")
+    public Integer forward(@RequestBody AdminForwardNoticeParam adminForwardNoticeParam,
+                        @PathVariable Long noticeId,
+                        @AuthenticationPrincipal Employee employee) {
+
+       return noticeService.forward(employee.getEmployeeId(),
+                adminForwardNoticeParam.getReceiverDepIdList(),
+                noticeId);
+    }
+
 
     /**
      * @Author Gzy
