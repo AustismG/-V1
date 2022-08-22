@@ -1,7 +1,10 @@
 package com.example.task.mapper;
 
+import com.example.task.vo.NoticeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 123
@@ -15,6 +18,15 @@ public interface NoticeReceiveMapper{
 
     void insert(@Param("noticeId") Long noticeId,
                 @Param("receiverId") Long receiverId);
+
+    void updateNoticeStatus(@Param("noticeId") Long noticeId,
+                            @Param("noticeStatus") Integer noticeStatus,
+                            @Param("receiverId") Long receiverId);
+
+    void logicalDelete(@Param("noticeId") Long noticeId);
+
+    List<NoticeVO> getNoticeReceiveList(@Param("receiverId") Long receiverId,
+                                        @Param("noticeStatus") Long noticeStatus);
 }
 
 

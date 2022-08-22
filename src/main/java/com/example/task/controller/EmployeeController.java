@@ -3,16 +3,23 @@ package com.example.task.controller;
 import com.example.task.entity.Employee;
 import com.example.task.param.EmployeeParam.UpdatePasswordParam;
 import com.example.task.param.LoginParam;
+import com.example.task.param.NoticeParam.EmployeeGetNoticeParam;
+import com.example.task.param.NoticeParam.SearchNoticeParam;
+import com.example.task.param.PagingParam;
 import com.example.task.param.RegisterParam;
 import com.example.task.service.EmployeeService;
+import com.example.task.service.NoticeReceiveService;
 import com.example.task.utils.JWTUtil;
 import com.example.task.param.EmployeeParam.EmployeeModifyOwnInfoParam;
+import com.example.task.vo.NoticeVO;
+import com.example.task.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.ldap.PagedResultsControl;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -24,27 +31,29 @@ import javax.validation.Valid;
 @RequestMapping("/system/employees")
 public class EmployeeController {
     @Autowired
-    EmployeeService employeeService;
+    private EmployeeService employeeService;
+    @Autowired
+    private NoticeReceiveService noticeReceiveService;
 
     /**
+     * @return void
      * @Author Gzy
      * @Description 系统用户注册
      * @Param [registerParam]
-     * @return void
-     * @is_Available 测试已通过!       
+     * @is_Available 测试已通过!
      **/
     @PostMapping("/register")
     public void register(@RequestBody RegisterParam registerParam) {
-        log.info("这是接收到的Body："+registerParam);
+        log.info("这是接收到的Body：" + registerParam);
         employeeService.register(registerParam);
     }
 
     /**
+     * @return java.lang.Object
      * @Author Gzy
      * @Description 系统用户登录
      * @Param [loginParam, httpServletResponse]
-     * @return java.lang.Object
-     * @is_Available 测试已通过!       
+     * @is_Available 测试已通过!
      **/
     @PostMapping("/login")
     public Object login(@RequestBody @Valid LoginParam loginParam, HttpServletResponse httpServletResponse) {
@@ -55,10 +64,10 @@ public class EmployeeController {
     }
 
     /**
+     * @return void
      * @Author Gzy
      * @Description 员工修改自己的信息
      * @Param [employee, employeeEditVo]
-     * @return void
      * @is_Available 测试已通过!
      **/
     @PutMapping("/info")
@@ -68,11 +77,57 @@ public class EmployeeController {
         employeeService.modifyOwnInfo(employee.getEmployeeId(), employeeModifyOwnInfoParam);
     }
 
+    /**
+     * @return void
+     * @Author Gzy
+     * @Description 员工修改自己的密码
+     * @Param [updatePasswordParam, employeeId]
+     * @is_Available 测试已通过!
+     **/
     @PutMapping("/password/{employeeId}")
     public void updatePassword(@RequestBody UpdatePasswordParam updatePasswordParam, @PathVariable Long employeeId) {
         employeeService.updatePassword(updatePasswordParam.getOriginalPassword(),
                 updatePasswordParam.getModifiedPassword(),
                 employeeId);
+    }
+
+    /**
+     * @return
+     * @Author Gzy
+     * @Description 获取 未读/已读 的公告
+     * @Param
+     * @is_Available 测试未通过!
+     **/
+    @GetMapping("/notices")
+    public PageResult<NoticeVO> getNotice(@RequestBody EmployeeGetNoticeParam employeeGetNoticeParam,
+                                          @AuthenticationPrincipal Employee employee,
+                                          PagingParam pagingParam) {
+
+        return noticeReceiveService.getNotice(employee.getEmployeeId(),
+                employeeGetNoticeParam.getNoticeStatus(),
+                pagingParam.getCurrent(),
+                pagingParam.getPageSize());
+    }
+
+    /**
+     * @return
+     * @Author Gzy
+     * @Description 员工在前端点击”已读“后，更新表中该条数据的”读取状态“
+     * @Param
+     * @is_Available 测试未通过!
+     **/
+    @PutMapping("/notices/{noticeId}/{noticeStatus}")
+    public void updateNoticeStatus(@PathVariable Long noticeId,
+                                   @PathVariable Integer noticeStatus,
+                                   @AuthenticationPrincipal Employee employee) {
+
+        noticeReceiveService.updateNoticeStatus(noticeId, noticeStatus, employee.getEmployeeId());
+    }
+
+
+    @PutMapping("/notices/{noticeId}")
+    public void logicalDelete(@PathVariable Long noticeId) {
+        noticeReceiveService.logicalDelete(noticeId);
     }
 }
 

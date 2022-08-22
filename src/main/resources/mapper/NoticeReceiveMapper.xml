@@ -3,8 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.task.mapper.NoticeReceiveMapper">
+
     <insert id="insert">
         insert into salary_system.t_notice_receive(notice_id, receiver_id)
         values (#{noticeId}, #{receiverId})
     </insert>
+
+    <update id="updateNoticeStatus">
+        update salary_system.t_notice_receive
+        set notice_status = #{noticeStatus}
+        where notice_id = #{noticeId}
+          and receiver_id = #{receiverId}
+    </update>
+
+    <update id="logicalDelete">
+        update salary_system.t_notice_receive
+        set
+    </update>
+
+    <select id="getNoticeReceiveList" resultType="com.example.task.vo.NoticeVO">
+        select title, content, sender_id, send_time
+        from (salary_system.t_notice_receive t1 left join salary_system.t_notice_send t2 on t1.receiver_id = t2.receiver_id)
+                 left join salary_system.t_notice t3 on t2.notice_id = t3.notice_id
+        where t1.notice_id = t2.notice_id
+          and t1.notice_status = #{noticeStatus}
+          and t1.receiver_id = #{receiverId}
+    </select>
 </mapper>
