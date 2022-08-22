@@ -11,14 +11,17 @@
 
     <update id="updateNoticeStatus">
         update salary_system.t_notice_receive
-        set notice_status = #{noticeStatus}
+        set notice_status = #{noticeStatus},
+            read_time     = #{readTime}
         where notice_id = #{noticeId}
           and receiver_id = #{receiverId}
     </update>
 
     <update id="logicalDelete">
-        update salary_system.t_notice_receive
-        set
+        update salary_system.t_notice_send
+        set receiver_status = 1
+        where notice_id = #{noticeId}
+          and receiver_id = #{receiverId}
     </update>
 
     <select id="getNoticeReceiveList" resultType="com.example.task.vo.NoticeVO">
@@ -28,5 +31,6 @@
         where t1.notice_id = t2.notice_id
           and t1.notice_status = #{noticeStatus}
           and t1.receiver_id = #{receiverId}
+          and t2.receiver_status = 0
     </select>
 </mapper>

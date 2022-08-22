@@ -126,8 +126,10 @@ public class EmployeeController {
 
 
     @PutMapping("/notices/{noticeId}")
-    public void logicalDelete(@PathVariable Long noticeId) {
-        noticeReceiveService.logicalDelete(noticeId);
+    public void logicalDelete(@PathVariable Long noticeId,
+                              @AuthenticationPrincipal Employee employee) {
+
+        noticeReceiveService.logicalDelete(noticeId,employee.getEmployeeId());
     }
 }
 

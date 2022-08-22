@@ -13,7 +13,7 @@ public interface NoticeReceiveService{
 
     void updateNoticeStatus(Long noticeId, Integer noticeStatus, Long receiverId);
 
-    void logicalDelete(Long noticeId);
+    void logicalDelete(Long noticeId,Long receiverId);
 
     PageResult<NoticeVO> getNotice(Long receiverId, Long noticeStatus, Integer current, Integer pageSize);
 }

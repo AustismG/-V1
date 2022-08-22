@@ -9,6 +9,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,12 +28,14 @@ public class NoticeReceiveServiceImpl implements NoticeReceiveService{
                                    Integer noticeStatus,
                                    Long receiverId) {
 
-        noticeReceiveMapper.updateNoticeStatus(noticeId,noticeStatus,receiverId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String readTime = sdf.format(new Date());
+        noticeReceiveMapper.updateNoticeStatus(noticeId,noticeStatus,receiverId,readTime);
     }
 
     @Override
-    public void logicalDelete(Long noticeId) {
-        noticeReceiveMapper.logicalDelete(noticeId);
+    public void logicalDelete(Long noticeId,Long receiverId) {
+        noticeReceiveMapper.logicalDelete(noticeId,receiverId);
     }
 
     @Override

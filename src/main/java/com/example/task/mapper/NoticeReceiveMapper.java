@@ -21,9 +21,11 @@ public interface NoticeReceiveMapper{
 
     void updateNoticeStatus(@Param("noticeId") Long noticeId,
                             @Param("noticeStatus") Integer noticeStatus,
-                            @Param("receiverId") Long receiverId);
+                            @Param("receiverId") Long receiverId,
+                            @Param("readTime") String readTime);
 
-    void logicalDelete(@Param("noticeId") Long noticeId);
+    void logicalDelete(@Param("noticeId") Long noticeId,
+                       @Param("receiverId")Long receiverId);
 
     List<NoticeVO> getNoticeReceiveList(@Param("receiverId") Long receiverId,
                                         @Param("noticeStatus") Long noticeStatus);
