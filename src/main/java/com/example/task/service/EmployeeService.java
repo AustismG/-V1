@@ -26,7 +26,7 @@ public interface EmployeeService  {
 
     void delete(Long employeeId);
 
-    void AdminModifyEmployeeInfo(String employeeName, Integer sex, Long departmentId, String password, String phone, Integer role,Long employeeId);
+    void adminModifyEmployeeInfo(String employeeName, Integer sex, Long departmentId, String password, String phone, Integer role,Long employeeId);
 
     PageResult<EmployeeVO> search(Long employeeId, String employeeName, Long departmentId, String phone, Integer role, Integer current, Integer pageSize);
 

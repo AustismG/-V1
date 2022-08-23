@@ -18,7 +18,7 @@ public interface DepartmentService {
 
     void delete(List<Long> depIdList);
 
-    void update(Long departmentId,String departmentName, String parentDepName);
+    void update(Long departmentId,String departmentName, Long parentDepId);
 
     PageResult<DepartmentVO> search(Long departmentId, String departmentName, Long parentId, Integer current, Integer pageSize);
 }

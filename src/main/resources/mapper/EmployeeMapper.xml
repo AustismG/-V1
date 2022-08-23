@@ -32,18 +32,17 @@
         <result property="employeeName" column="employee_name"/>
         <result property="sex" column="sez"/>
         <result property="phone" column="phone"/>
-        <result property="departmentName" column="dep_name"/>
         <result property="role" column="user_role"/>
     </resultMap>
 
     <insert id="insert">
-        insert into salary_system.t_employee(employee_id, passwd, employee_name, sex, phone, dep_name, dep_id)
-        values (#{employeeId}, #{encodedPassword}, #{employeeName}, #{sex}, #{phone}, #{departmentName}, #{departmentId})
+        insert into salary_system.t_employee(employee_id, passwd, employee_name, sex, phone, dep_id)
+        values (#{employeeId}, #{encodedPassword}, #{employeeName}, #{sex}, #{phone}, #{departmentId})
     </insert>
 
     <insert id="adminInsert">
-        insert into salary_system.t_employee(employee_id, employee_name, phone, sex, dep_name, user_role, passwd, dep_id)
-        values (#{employeeId}, #{employeeName}, #{phone}, #{sex}, #{departmentName}, #{role}, #{passwd}, #{departmentId})
+        insert into salary_system.t_employee(employee_id, employee_name, phone, sex, user_role, passwd, dep_id)
+        values (#{employeeId}, #{employeeName}, #{phone}, #{sex}, #{role}, #{passwd}, #{departmentId})
     </insert>
 
     <update id="employeeModifyOwnInfo">
@@ -57,14 +56,6 @@
             </if>
             <if test="phone != null">
                 phone = #{phone},
-            </if>
-            <if test="departmentId != null">
-                dep_id = #{departmentId},
-                dep_name = (
-                select dep_name
-                from salary_system.t_department
-                where dep_id = #{departmentId}
-                )
             </if>
         </set>
         where employee_id = #{employeeId}
@@ -81,7 +72,6 @@
             </if>
             <if test="departmentId != null">
                 dep_id = #{departmentId},
-                dep_name = #{departmentName},
             </if>
             <if test="password != null">
                 passwd = #{password},
@@ -94,12 +84,6 @@
             </if>
         </set>
         where employee_id = #{employeeId}
-    </update>
-
-    <update id="updateDepName">
-        update salary_system.t_department
-        set dep_name = #{modifiedDepartmentName}
-        where dep_name = #{originDepartmentName}
     </update>
 
     <update id="updatePassword">
@@ -127,8 +111,8 @@
     </select>
 
     <select id="getEmployeeList" resultMap="getEmployeeVOById">
-        select employee_id,employee_name,sex,phone,dep_name,user_role
-        from salary_system.t_employee
+        select employee_id,employee_name,sex,phone,t2.dep_name,user_role
+        from salary_system.t_employee t1 INNER JOIN salary_system.t_department t2 ON t1.dep_id = t2.dep_id
         <where>
             <if test="employeeId != null">
                 employee_id = #{employeeId}

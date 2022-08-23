@@ -57,23 +57,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional
-    public void update(Long departmentId,String modifiedDepartmentName, String modifiedParentDepName) {
+    public void update(Long departmentId,String modifiedDepartmentName, Long modifiedParentDepId) {
         //1. 修改某个部门的名称
         if (modifiedDepartmentName != null) {
             departmentMapper.updateDepName(departmentId,modifiedDepartmentName);
-            //用户的部门字段也得跟着修改
-            String originDepartmentName = departmentMapper.getDepNameByDepId(departmentId);
-            employeeMapper.updateDepName(originDepartmentName,modifiedDepartmentName);
         }
 
         //2. 修改某个部门的父部门(根据用户提供的部门名称，更新parent_id字段)
-        if (modifiedParentDepName != null) {
-            Long destParentId = departmentMapper.getDepIdByDepName(modifiedParentDepName);
-            if (destParentId == null) {
-                log.warn("[错误提示] 输入的父部门名称是：" + modifiedParentDepName);
+        if (modifiedParentDepId != null) {
+            if (departmentMapper.getDepNameByDepId(modifiedParentDepId) == null) {
+                log.warn("[错误提示] 输入的父部门ID是：" + modifiedParentDepId);
                 throw new BusinessException(ResultCodeEnum.WRONG_DEP);
             }
-            departmentMapper.updateParentId(departmentId,destParentId);
+            departmentMapper.updateParentId(departmentId,modifiedParentDepId);
         }
     }
 

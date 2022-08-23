@@ -40,7 +40,9 @@ public class SearchEmployeeParam {
     private String phone;
 
     /**
-     * 部门名称
+     * 部门ID
      */
+    @Max(value = 70000,message = "部门ID最大值为70000")
+    @Min(value = 10000,message = "部门ID最小值为10000")
     private Long departmentId;
 }

@@ -30,5 +30,4 @@ public class EmployeeModifyOwnInfoParam {
     @Length(max = 11,message = "手机号长度最大为11")
     private String phone;
 
-    private Long departmentId;
 }

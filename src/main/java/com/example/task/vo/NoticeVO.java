@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description:
+ * 公告视图
  */
 @Data
 public class NoticeVO {

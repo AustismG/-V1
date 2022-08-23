@@ -49,12 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void register(RegisterParam registerParam) {
         Long employeeId = registerParam.getEmployeeId();
-        String employeeName = registerParam.getEmployeeName();
-        String password = registerParam.getPassword();
-        String encodedPassword = passwordEncoder.encode(password);
-        Long departmentId = registerParam.getDepartmentId();
-        Integer sex = registerParam.getSex();
-        String phone = registerParam.getPhone();
+        String encodedPassword = passwordEncoder.encode(registerParam.getPassword());
 
         //首先用前端传过来的员工ID在数据库里查询，看看是否已经存在这个用户，如果存在说明这个用户已经注册过了
         Employee employee = employeeMapper.findEmployeeById(employeeId);
@@ -62,11 +57,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new BusinessException(ResultCodeEnum.USERNAME_ALREADY_EXIST, "用户已存在");
         }
 
-        //员工注册时，系统通过前端提供的部门ID查询对应的部门名称，帮员工写入对应字段
-        //getIdByName()实现了“通过部门ID查询部门名称”的功能
-        String departmentName = departmentMapper.getDepNameByDepId(departmentId);
         try {
-            employeeMapper.insert(employeeId, employeeName, encodedPassword, sex,phone, departmentName, departmentId);
+            employeeMapper.insert(employeeId,registerParam.getEmployeeName(), encodedPassword, registerParam.getSex(),registerParam.getPhone(), registerParam.getDepartmentId());
         } catch (DuplicateKeyException e) {
             throw new BusinessException(ResultCodeEnum.PHONE_ALREADY_EXIST);
         }
@@ -91,7 +83,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.employeeModifyOwnInfo(employeeModifyOwnInfoParam.getEmployeeName(),
                 employeeModifyOwnInfoParam.getSex(),
                 employeeModifyOwnInfoParam.getPhone(),
-                employeeModifyOwnInfoParam.getDepartmentId(),
                 employeeId);
     }
 
@@ -102,6 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                        String phone,
                        Long departmentId,
                        Integer role) {
+
         String defaultPasswd = "123456@xyz";
         String encodedPasswd = passwordEncoder.encode(defaultPasswd);
         String departmentName = departmentMapper.getDepNameByDepId(departmentId);
@@ -109,7 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new BusinessException(ResultCodeEnum.WRONG_DEP,"部门不存在，请检查输入或联系管理员添加部门");
         }
         try {
-            employeeMapper.adminInsert(eeId, eeName, sex, phone, departmentName, role, encodedPasswd, departmentId);
+            employeeMapper.adminInsert(eeId, eeName, sex, phone, role, encodedPasswd, departmentId);
         } catch (DuplicateKeyException e) {
             throw new BusinessException(ResultCodeEnum.PHONE_ALREADY_EXIST);
         }
@@ -122,21 +114,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void AdminModifyEmployeeInfo(String employeeName,
+    public void adminModifyEmployeeInfo(String employeeName,
                        Integer sex,
                        Long departmentId,
                        String password,
                        String phone,
                        Integer role,
                        Long employeeId) {
-        String departmentName = null;
         if (password != null) {
             password = passwordEncoder.encode(password);
         }
-        if (departmentId != null) {
-            departmentName = employeeMapper.getDepNameByDepId(departmentId);
-        }
-        employeeMapper.adminModifyEmployeeInfo(employeeName, sex, departmentId,departmentName, password, phone, role,employeeId);
+
+        employeeMapper.adminModifyEmployeeInfo(employeeName, sex, departmentId, password, phone, role,employeeId);
     }
 
     @Override

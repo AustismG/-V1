@@ -19,6 +19,7 @@
         set dep_name = #{departmentName}
         where dep_id = #{departmentId}
     </update>
+
     <update id="updateParentId">
         update salary_system.t_department
         set parent_id = #{parentId}
@@ -43,11 +44,13 @@
         from salary_system.t_department
         where parent_id = #{depId}
     </select>
+
     <select id="getDepNameByDepId" resultType="java.lang.String">
         select dep_name
         from salary_system.t_department
         where dep_id = #{departmentId}
     </select>
+
     <select id="getDepList" resultMap="getDepartmentVO">
         select son.dep_id,son.dep_name,father.dep_name f_name
         from salary_system.t_department son left join salary_system.t_department father on (son.parent_id = father.dep_id)
@@ -64,6 +67,7 @@
             </if>
         </where>
     </select>
+
 </mapper>
 
 

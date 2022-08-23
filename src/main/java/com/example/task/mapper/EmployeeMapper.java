@@ -23,14 +23,12 @@ public interface EmployeeMapper {
                @Param("encodedPassword") String encodedPassword,
                @Param("sex") Integer sex,
                @Param("phone") String phone,
-               @Param("departmentName") String departmentName,
                @Param("departmentId") Long departmentId);
 
     void employeeModifyOwnInfo(
             @Param("employeeName") String employeeName,
             @Param("sex") Integer sex,
             @Param("phone") String phone,
-            @Param("departmentId") Long departmentId,
             @Param("employeeId") Long employeeId);
 
     Employee getEmployeeByEId(@Param("employeeId") Long employeeId);
@@ -45,7 +43,6 @@ public interface EmployeeMapper {
                      @Param("employeeName") String employeeName,
                      @Param("sex") Integer sex,
                      @Param("phone") String phone,
-                     @Param("departmentName") String departmentName,
                      @Param("role") Integer role,
                      @Param("passwd") String passwd,
                      @Param("departmentId") Long departmentId);
@@ -53,7 +50,6 @@ public interface EmployeeMapper {
     void adminModifyEmployeeInfo(@Param("employeeName") String employeeName,
                                  @Param("sex") Integer sex,
                                  @Param("departmentId") Long departmentId,
-                                 @Param("departmentName") String departmentName,
                                  @Param("password") String password,
                                  @Param("phone") String phone,
                                  @Param("role") Integer role,
@@ -61,8 +57,6 @@ public interface EmployeeMapper {
 
     void delete(@Param("employeeId") Long employeeId);
 
-    void updateDepName(@Param("originDepartmentName") String originDepartmentName,
-                       @Param("modifiedDepartmentName") String modifiedDepartmentName);
 
     String getPasswordByEmployeeId(@Param("employeeId") Long employeeId);
 

@@ -15,8 +15,10 @@ import com.example.task.vo.NoticeVO;
 import com.example.task.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.ldap.PagedResultsControl;
@@ -84,11 +86,11 @@ public class EmployeeController {
      * @Param [updatePasswordParam, employeeId]
      * @is_Available 测试已通过!
      **/
-    @PutMapping("/password/{employeeId}")
-    public void updatePassword(@RequestBody UpdatePasswordParam updatePasswordParam, @PathVariable Long employeeId) {
+    @PutMapping("/password")
+    public void updatePassword(@RequestBody UpdatePasswordParam updatePasswordParam, @AuthenticationPrincipal Employee employee) {
         employeeService.updatePassword(updatePasswordParam.getOriginalPassword(),
                 updatePasswordParam.getModifiedPassword(),
-                employeeId);
+                employee.getEmployeeId());
     }
 
     /**
@@ -96,7 +98,7 @@ public class EmployeeController {
      * @Author Gzy
      * @Description 获取 未读/已读 的公告
      * @Param
-     * @is_Available 测试未通过!
+     * @is_Available 测试已通过!
      **/
     @GetMapping("/notices")
     public PageResult<NoticeVO> getNotice(@RequestBody EmployeeGetNoticeParam employeeGetNoticeParam,
@@ -114,7 +116,7 @@ public class EmployeeController {
      * @Author Gzy
      * @Description 员工在前端点击”已读“后，更新表中该条数据的”读取状态“
      * @Param
-     * @is_Available 测试未通过!
+     * @is_Available 测试已通过!
      **/
     @PutMapping("/notices/{noticeId}/{noticeStatus}")
     public void updateNoticeStatus(@PathVariable Long noticeId,
@@ -125,6 +127,13 @@ public class EmployeeController {
     }
 
 
+    /**
+     * @Author Gzy
+     * @Description 员工对自己接收到的公告进行逻辑删除
+     * @Param [noticeId, employee]
+     * @return void
+     * @is_Available 测试未通过!
+     **/
     @PutMapping("/notices/{noticeId}")
     public void logicalDelete(@PathVariable Long noticeId,
                               @AuthenticationPrincipal Employee employee) {
