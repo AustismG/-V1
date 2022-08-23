@@ -29,6 +29,8 @@ public interface NoticeReceiveMapper{
 
     List<NoticeVO> getNoticeReceiveList(@Param("receiverId") Long receiverId,
                                         @Param("noticeStatus") Long noticeStatus);
+
+    Integer getHaveReadCount(@Param("noticeId") Long noticeId);
 }
 
 

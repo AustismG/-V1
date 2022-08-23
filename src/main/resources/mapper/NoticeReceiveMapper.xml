@@ -33,4 +33,10 @@
           and t1.receiver_id = #{receiverId}
           and t2.receiver_status = 0
     </select>
+
+    <select id="getHaveReadCount" resultType="java.lang.Integer">
+        select count(notice_id)
+        from salary_system.t_notice_receive
+        where notice_id = #{noticeId} and notice_status = 1
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.example.task.mapper;
 
+import com.example.task.vo.HaveReadCountVO;
 import com.example.task.vo.NoticeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -44,6 +45,9 @@ public interface NoticeMapper {
                                  @Param("originalReceiverDepIdList") String originalReceiverDepIdList);
 
     String getReceiverDepIdList(@Param("noticeId") Long noticeId);
+
+
+    List<HaveReadCountVO> getHaveReadCountVO(@Param("noticeId") Long noticeId);
 }
 
 

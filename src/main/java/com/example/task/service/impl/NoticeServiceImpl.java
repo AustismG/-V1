@@ -7,6 +7,7 @@ import com.example.task.mapper.NoticeMapper;
 import com.example.task.mapper.NoticeReceiveMapper;
 import com.example.task.mapper.NoticeSendMapper;
 import com.example.task.service.NoticeService;
+import com.example.task.vo.HaveReadCountVO;
 import com.example.task.vo.NoticeVO;
 import com.example.task.vo.PageResult;
 import com.github.pagehelper.PageHelper;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -117,6 +119,23 @@ public class NoticeServiceImpl implements NoticeService{
         originalReceiverDepIdList += ","+StringUtils.join(receiverDepIdList);
         noticeMapper.updateReceiverDepIdList(noticeId,originalReceiverDepIdList);
         return receiverCount;
+    }
+
+    @Override
+    public PageResult<HaveReadCountVO> getHaveReadCount(Long noticeId,
+                                                        Integer current,
+                                                        Integer pageSize) {
+
+        PageHelper.startPage(current, pageSize);
+        List<HaveReadCountVO> list = noticeMapper.getHaveReadCountVO(noticeId);
+        PageInfo<HaveReadCountVO> pageInfo = new PageInfo<>(list);
+
+        PageResult<HaveReadCountVO> result = new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setPrev(pageInfo.isHasPreviousPage() ? pageInfo.getPrePage() : -1);
+        result.setNext(pageInfo.isHasNextPage() ? pageInfo.getNextPage() : -1);
+        result.setList(list);
+        return result;
     }
 
 

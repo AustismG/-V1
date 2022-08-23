@@ -5,6 +5,7 @@ import com.example.task.param.NoticeParam.*;
 import com.example.task.param.PagingParam;
 import com.example.task.service.NoticeService;
 import com.example.task.vo.CommonResult;
+import com.example.task.vo.HaveReadCountVO;
 import com.example.task.vo.NoticeVO;
 import com.example.task.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
@@ -122,6 +123,15 @@ public class NoticeController {
                 searchNoticeParam.getContent(),
                 searchNoticeParam.getStartDate(),
                 searchNoticeParam.getEndDate(),
+                pagingParam.getCurrent(),
+                pagingParam.getPageSize());
+    }
+
+    @GetMapping("/notices/{noticeId}")
+    public PageResult<HaveReadCountVO> getHaveReadCount(@PathVariable Long noticeId,
+                                                        PagingParam pagingParam) {
+
+        return noticeService.getHaveReadCount(noticeId,
                 pagingParam.getCurrent(),
                 pagingParam.getPageSize());
     }

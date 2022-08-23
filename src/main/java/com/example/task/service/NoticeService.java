@@ -1,5 +1,6 @@
 package com.example.task.service;
 
+import com.example.task.vo.HaveReadCountVO;
 import com.example.task.vo.NoticeVO;
 import com.example.task.vo.PageResult;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,7 @@ public interface NoticeService {
     int publishNotice(Long publisherId, List<String> receiverDepIdList, Long noticeId);
 
     Integer forward(Long publisherId, List<String> receiverDepIdList, Long noticeId);
+
+
+    PageResult<HaveReadCountVO> getHaveReadCount(Long noticeId, Integer current, Integer pageSize);
 }

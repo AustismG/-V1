@@ -9,6 +9,12 @@
         <result property="publishTime" column="publish_time"/>
     </resultMap>
 
+    <resultMap id="getHaveReadCountVO" type="com.example.task.vo.HaveReadCountVO">
+        <result property="employeeName" column="employee_name"/>
+        <result property="employeeDepName" column="dep_name"/>
+        <result property="readTime" column="read_time"/>
+
+    </resultMap>
     <insert id="adminInsert">
         insert into salary_system.t_notice(title, content, receiver_dep_id_list, notice_status, publisher_id)
         values (#{title}, #{content}, #{receiverDepIdStr}, #{noticeStatus}, #{publisherId})
@@ -47,7 +53,7 @@
 
     <select id="getNoticeList" resultMap="getNoticeVO">
         select title,content,publisher_id,t1.create_time
-        from salary_system.t_notice t1 left join salary_system.t_notice_send  t2 on t1.notice_id = t2.notice_id
+        from salary_system.t_notice t1 left join salary_system.t_notice_send t2 on t1.notice_id = t2.notice_id
         <where>
             <if test="noticeId != null">
                 notice_id = #{noticeId}
@@ -78,5 +84,13 @@
         select receiver_dep_id_list
         from salary_system.t_notice
         where notice_id = #{noticeId}
+    </select>
+
+    <select id="getHaveReadCountVO" resultMap="getHaveReadCountVO">
+        select employee_name, dep_name, read_time
+        from (salary_system.t_notice_receive t1 inner join salary_system.t_employee t2 on t1.receiver_id = t2.employee_id)
+                 inner join salary_system.t_department t3 on t2.dep_id = t3.dep_id
+        where t1.notice_id = #{noticeId}
+          and t1.notice_status = 1
     </select>
 </mapper>
