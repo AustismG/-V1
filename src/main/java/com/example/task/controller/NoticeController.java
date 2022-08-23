@@ -115,10 +115,11 @@ public class NoticeController {
      **/
     @GetMapping("/notices")
     public PageResult<NoticeVO> search(@Valid SearchNoticeParam searchNoticeParam,
+                                       @AuthenticationPrincipal Employee employee,
                                        PagingParam pagingParam) {
 
         return noticeService.search(searchNoticeParam.getNoticeId(),
-                searchNoticeParam.getPublisherId(),
+                employee.getEmployeeId(),
                 searchNoticeParam.getTitle(),
                 searchNoticeParam.getContent(),
                 searchNoticeParam.getStartDate(),
@@ -127,6 +128,13 @@ public class NoticeController {
                 pagingParam.getPageSize());
     }
 
+    /**
+     * @Author Gzy
+     * @Description 管理员查看公告已读人员的具体信息
+     * @Param [noticeId, pagingParam]
+     * @return com.example.task.vo.PageResult<com.example.task.vo.HaveReadCountVO>
+     * @is_Available 测试已通过!
+     **/
     @GetMapping("/notices/{noticeId}")
     public PageResult<HaveReadCountVO> getHaveReadCount(@PathVariable Long noticeId,
                                                         PagingParam pagingParam) {

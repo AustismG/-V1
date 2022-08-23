@@ -12,10 +12,6 @@ public class SearchNoticeParam {
      */
     private Long noticeId;
 
-    /**
-     * 发布公告者ID
-     */
-    private Long publisherId;
 
     /**
      * 公告标题
