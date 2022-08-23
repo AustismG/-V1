@@ -4,6 +4,7 @@ import com.example.task.service.NoticeSendService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,9 +22,10 @@ public class NoticeSendController {
      * @Description 管理员逻辑删除公告
      * @Param [senderStatus, noticeId]
      * @return void
-     * @is_Available 测试未通过!       
+     * @is_Available 测试已通过!
      **/
     @PutMapping("/notices/{senderStatus}/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateStatus(@PathVariable Integer senderStatus,
                              @PathVariable Long noticeId) {
 

@@ -49,10 +49,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void delete(List<Long> depIdList) {
-        for (Long depId : depIdList) {
-            deleteDep(depId);
+    public void delete(Long departmentId) {
+        if (hasSonDep(departmentId)) {
+            throw new BusinessException(ResultCodeEnum.HAS_SON_DEP);
         }
+        departmentMapper.delete(departmentId);
+
     }
 
     @Override
@@ -92,14 +94,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
 
-    /**
-     * @Author Gzy
-     * @Description 递归地删除部门及它的附属部门
-     * @Param [depId]
-     * @return void
-     * @is_Available 测试已通过!
-     **/
-    @Transactional
+    //递归删除部门
+    /*@Transactional
     void deleteDep(Long depId){
         //判断：如果当前部门ID为null，则返回上一层
         if (depId == null) {
@@ -115,6 +111,18 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         //递归到叶子节点时，开始自底向上删除部门
         departmentMapper.delete(depId);
+    }*/
+
+    /**
+     * @Author Gzy
+     * @Description 判断当前部门下是否存在子部门
+     * @Param [departmentId]
+     * @return boolean
+     * @is_Available 测试已通过!
+     **/
+    boolean hasSonDep(Long departmentId) {
+        List<Long> sonIdList = departmentMapper.getSonDepId(departmentId);
+        return sonIdList.size() != 0;
     }
 
 }

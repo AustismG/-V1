@@ -126,15 +126,15 @@ public class AdminController {
 
     /**
      * @Author Gzy
-     * @Description 管理员根据部门ID删除部门（可批量）
+     * @Description 管理员根据部门ID删除部门
      * @Param [delDepParam]
      * @return void
      * @is_Available 测试已通过!
      **/
-    @DeleteMapping("/departments")
+    @DeleteMapping("/departments/{departmentId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteDep(@RequestBody @Valid AdminDelDepParam adminDelDepParam) {
-        departmentService.delete(adminDelDepParam.getDepIdList());
+    public void deleteDep(@PathVariable Long departmentId) {
+        departmentService.delete(departmentId);
     }
 
     /**

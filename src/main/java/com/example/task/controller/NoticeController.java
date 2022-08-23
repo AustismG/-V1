@@ -10,6 +10,7 @@ import com.example.task.vo.NoticeVO;
 import com.example.task.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class NoticeController {
      * @is_Available 测试已通过!       
      **/
     @PostMapping("/notices")
+    @PreAuthorize("hasRole('ADMIN')")
     public Integer insert(@RequestBody @Valid AdminInsertNoticeParam adminInsertNoticeParam,
                           @AuthenticationPrincipal Employee employee) {
 
@@ -51,6 +53,7 @@ public class NoticeController {
      * @is_Available 测试已通过!
      **/
     @PostMapping("/notices/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Integer publish(@RequestBody AdminPublishNoticeParam adminPublishNoticeParam,
                         @PathVariable Long noticeId,
                         @AuthenticationPrincipal Employee employee) {
@@ -62,12 +65,13 @@ public class NoticeController {
 
     /**
      * @Author Gzy
-     * @Description 管理员根据ID删除公告（物理删除）
+     * @Description 管理员根据ID物理删除公告
      * @Param [adminDelNoticeParam]
      * @return void
      * @is_Available 测试已通过!       
      **/
     @DeleteMapping("/notices/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void PhysicalDelete(@PathVariable Long noticeId) {
         noticeService.delete(noticeId);
     }
@@ -81,6 +85,7 @@ public class NoticeController {
      * @is_Available 测试已通过!       
      **/
     @PutMapping("/notices/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void update(@RequestBody AdminModifyNoticeParam adminModifyNoticeParam,
                        @PathVariable Long noticeId) {
 
@@ -96,6 +101,7 @@ public class NoticeController {
      * @is_Available 测试已通过!
      **/
     @PostMapping("/notices/otherDep/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Integer forward(@RequestBody AdminForwardNoticeParam adminForwardNoticeParam,
                         @PathVariable Long noticeId,
                         @AuthenticationPrincipal Employee employee) {
@@ -114,6 +120,7 @@ public class NoticeController {
      * @is_Available 测试已通过!
      **/
     @GetMapping("/notices")
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResult<NoticeVO> search(@Valid SearchNoticeParam searchNoticeParam,
                                        @AuthenticationPrincipal Employee employee,
                                        PagingParam pagingParam) {
@@ -136,6 +143,7 @@ public class NoticeController {
      * @is_Available 测试已通过!
      **/
     @GetMapping("/notices/{noticeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResult<HaveReadCountVO> getHaveReadCount(@PathVariable Long noticeId,
                                                         PagingParam pagingParam) {
 

@@ -46,6 +46,11 @@ public enum ResultCodeEnum {
     DEPNAME_ALREADY_EXIST(10011,"部门已存在，请勿重复插入"),
 
     /**
+     * 部门下存在子部门
+     */
+    HAS_SON_DEP(10012, "存在子部门，请勿删除"),
+
+    /**
      * 个人所得税计算出错
      */
     WRONG_MONTH(10020,"个人所得税无法计算，请检查输入"),

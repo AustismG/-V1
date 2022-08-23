@@ -16,7 +16,7 @@ public interface DepartmentService {
 
     void insert(Long departmentId, String departmentName, Long parentDepId);
 
-    void delete(List<Long> depIdList);
+    void delete(Long departmentId);
 
     void update(Long departmentId,String departmentName, Long parentDepId);
 
